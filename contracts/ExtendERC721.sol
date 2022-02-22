@@ -19,7 +19,7 @@ contract ExtendERC721 is IExtendERC721, ERC721Enumerable, AccessControlEnumerabl
 
     event Created(address indexed to, uint256 indexed tokenId, string metadataId);
     event MetadataChanged(uint256 indexed tokenId, string metadataId);
-    event BaseURIChanged(string indexed baseURIExtended);
+    event BaseURIChanged(string baseURIExtended);
 
     constructor(string memory name_, string memory symbol_)
         ERC721(name_, symbol_)
@@ -122,6 +122,8 @@ contract ExtendERC721 is IExtendERC721, ERC721Enumerable, AccessControlEnumerabl
             _isApprovedOrOwner(_msgSender(), tokenId),
             "ERC721Burnable: caller is not owner nor approved"
         );
+
+        delete metadata[tokenId];
         _burn(tokenId);
     }
 }

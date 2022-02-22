@@ -64,7 +64,7 @@ contract Summon is Ownable, Pausable {
         uint8 nftType,
         string memory metadataId,
         bytes memory signature
-    ) public returns (uint256) {
+    ) public whenNotPaused returns (uint256) {
         address _sender = _msgSender();
 
         bytes32 hash = ECDSA.toEthSignedMessageHash(
@@ -97,5 +97,13 @@ contract Summon is Ownable, Pausable {
         } else {
             revert("Summon: failed to transfer fee to owner");
         }
+    }
+
+    function pause() public onlyOwner whenNotPaused {
+        _pause();
+    }
+
+    function unpause() public onlyOwner whenPaused {
+        _unpause();
     }
 }

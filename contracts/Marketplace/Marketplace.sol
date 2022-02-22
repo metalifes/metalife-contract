@@ -40,10 +40,10 @@ contract Marketplace is Ownable, Pausable, MarketplaceStorage, IERC721Receiver {
   /**
     * @dev Sets the share cut for the owner of the contract that's
     *  charged to the seller on a successful sale
-    * @param _ownerCutPerMillion - Share amount, from 0 to 999,999
+    * @param _ownerCutPerMillion - Share amount, from 0 to 400,000
     */
   function setOwnerCutPerMillion(uint256 _ownerCutPerMillion) public onlyOwner {
-    require(_ownerCutPerMillion < 1000000, "The owner cut should be between 0 and 999,999");
+    require(_ownerCutPerMillion <= 400000, "The owner cut should be between 0 and 400,000");
 
     ownerCutPerMillion = _ownerCutPerMillion;
     emit ChangedOwnerCutPerMillion(ownerCutPerMillion);
@@ -307,5 +307,13 @@ contract Marketplace is Ownable, Pausable, MarketplaceStorage, IERC721Receiver {
 
   function withdraw() external onlyOwner {
     payable(owner()).transfer(address(this).balance);
+  }
+
+  function pause() public onlyOwner whenNotPaused {
+    _pause();
+  }
+
+  function unpause() public onlyOwner whenPaused {
+    _unpause();
   }
 }
